@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.proyecto2progra;
 
 /**
@@ -9,17 +5,20 @@ package com.mycompany.proyecto2progra;
  * @author Victor
  */
 public class ListaOrtogonal {
-     NodoVehiculo inicio;
+
+    NodoVehiculo inicio;
+
     //constructor
     public ListaOrtogonal() {
         inicio = null;
     }
-   //Metodo para isertar un vehiculo en la lista ortogonal
+    //Metodo para isertar un vehiculo en la lista ortogonal
+
     public void insertarVehiculo(String placa, String color, String linea, int modelo, String propietario) {
         NodoVehiculo nuevo = new NodoVehiculo(placa, color, linea, modelo, propietario);
-          //
+        //
         if (inicio == null) {
-            inicio = nuevo; 
+            inicio = nuevo;
             return;
         }
         // Insertar el nuevo nodo al final de la lista en la dirección horizontal (derecha)

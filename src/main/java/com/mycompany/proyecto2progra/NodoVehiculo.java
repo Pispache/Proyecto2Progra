@@ -1,6 +1,7 @@
 package com.mycompany.proyecto2progra;
 
 public class NodoVehiculo {
+
     String placa;
     String color;
     String linea;
@@ -21,7 +22,8 @@ public class NodoVehiculo {
         this.abajo = null;
         this.izquierda = null;
         this.derecha = null;
-    } 
+    }
+
     //getter y setters
     public String getPlaca() {
         return placa;
@@ -94,5 +96,5 @@ public class NodoVehiculo {
     public void setDerecha(NodoVehiculo derecha) {
         this.derecha = derecha;
     }
-    
+
 }
