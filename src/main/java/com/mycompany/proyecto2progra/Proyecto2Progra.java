@@ -145,19 +145,54 @@ public class Proyecto2Progra {
                     }
                     break;
                 case 3:
-                    // Eliminar vehículo
                     System.out.println("Eliminar Vehículo:");
-                    System.out.print("Ingrese la placa del vehículo a eliminar: ");
-                    String placaEliminar = entrada.next();
+                    System.out.println("Seleccione el criterio de búsqueda:");
+                    System.out.println("1. Placa");
+                    System.out.println("2. Color");
+                    System.out.println("3. Línea");
+                    System.out.println("4. Modelo");
+                    System.out.println("5. Propietario");
+                    System.out.print("Ingrese el número del criterio de búsqueda: ");
 
-                    lista.eliminarVehiculo(placaEliminar);
-                    System.out.println("Vehiculo Eliminado");
+                    int criterioEliminar = entrada.nextInt();
+                    entrada.nextLine(); // Limpiar el buffer de entrada
+
+                    String criterioBusquedaEliminar;
+                    switch (criterioEliminar) {
+                        case 1:
+                            criterioBusquedaEliminar = "placa";
+                            break;
+                        case 2:
+                            criterioBusquedaEliminar = "color";
+                            break;
+                        case 3:
+                            criterioBusquedaEliminar = "linea";
+                            break;
+                        case 4:
+                            criterioBusquedaEliminar = "modelo";
+                            break;
+                        case 5:
+                            criterioBusquedaEliminar = "propietario";
+                            break;
+                        default:
+                            System.out.println("Criterio de búsqueda inválido.");
+                            criterioBusquedaEliminar = null;
+                            break;
+                    }
+
+                    if (criterioBusquedaEliminar != null) {
+                        System.out.print("Ingrese el valor del criterio de búsqueda: ");
+                        String valorEliminar = entrada.nextLine();
+
+                        lista.eliminarVehiculo(criterioBusquedaEliminar, valorEliminar);
+                        System.out.println("Vehículo eliminado exitosamente.");
+                    }
                     break;
                 case 4:
                     System.out.println("Listar Vehículos:");
                     lista.listarVehiculos();
                     break;
-                    
+
                 case 5:
                     System.out.println("Saliendo del programa...");
                     break;

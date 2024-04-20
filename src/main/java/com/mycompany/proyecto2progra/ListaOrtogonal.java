@@ -80,37 +80,47 @@ public class ListaOrtogonal {
         return null; // No se encontró ningún vehículo con el valor de búsqueda especificado
     }
 
-    public void eliminarVehiculo(String placa) {
-        if (inicio == null) {
-            System.out.println("La lista está vacía. No hay vehículos que eliminar.");
-            return;
+    public void eliminarVehiculo(String criterio, String valor) {
+        boolean encontrado = false; // Indica si se encontró al menos un vehículo para eliminar
+
+        NodoVehiculo temp = inicio;
+        while (temp != null) {
+            if ((criterio.equals("placa") && temp.getPlaca().equalsIgnoreCase(valor))
+                    || (criterio.equals("color") && temp.getColor().equalsIgnoreCase(valor))
+                    || (criterio.equals("linea") && temp.getLinea().equalsIgnoreCase(valor))
+                    || (criterio.equals("modelo") && String.valueOf(temp.getModelo()).equals(valor))
+                    || (criterio.equals("propietario") && temp.getPropietario().equalsIgnoreCase(valor))) {
+                encontrado = true; // Se encontró al menos un vehículo para eliminar
+
+                // Eliminar referencias al nodo del vehículo en las direcciones horizontal (derecha) y vertical (abajo)
+                if (temp.izquierda != null) {
+                    temp.izquierda.derecha = temp.derecha;
+                }
+                if (temp.derecha != null) {
+                    temp.derecha.izquierda = temp.izquierda;
+                }
+                if (temp.arriba != null) {
+                    temp.arriba.abajo = temp.abajo;
+                }
+                if (temp.abajo != null) {
+                    temp.abajo.arriba = temp.arriba;
+                }
+
+                // Si el nodo a eliminar es el inicio de la lista, actualizar el inicio
+                if (temp == inicio) {
+                    inicio = temp.derecha != null ? temp.derecha : temp.abajo;
+                }
+
+                // Avanzar al siguiente nodo en la dirección vertical (abajo)
+                temp = temp.getAbajo();
+            } else {
+                // Avanzar al siguiente nodo en la dirección horizontal (derecha)
+                temp = temp.getDerecha();
+            }
         }
 
-        // Buscar el nodo del vehículo con la placa especificada
-        NodoVehiculo vehiculoAEliminar = buscarVehiculo("placa", placa);
-
-        if (vehiculoAEliminar == null) {
-            System.out.println("El vehículo con la placa " + placa + " no está registrado.");
-            return;
-        }
-
-        // Eliminar referencias al nodo del vehículo en las direcciones horizontal (derecha) y vertical (abajo)
-        if (vehiculoAEliminar.izquierda != null) {
-            vehiculoAEliminar.izquierda.derecha = vehiculoAEliminar.derecha;
-        }
-        if (vehiculoAEliminar.derecha != null) {
-            vehiculoAEliminar.derecha.izquierda = vehiculoAEliminar.izquierda;
-        }
-        if (vehiculoAEliminar.arriba != null) {
-            vehiculoAEliminar.arriba.abajo = vehiculoAEliminar.abajo;
-        }
-        if (vehiculoAEliminar.abajo != null) {
-            vehiculoAEliminar.abajo.arriba = vehiculoAEliminar.arriba;
-        }
-
-        // Si el nodo a eliminar es el inicio de la lista, actualizar el inicio
-        if (vehiculoAEliminar == inicio) {
-            inicio = vehiculoAEliminar.derecha != null ? vehiculoAEliminar.derecha : vehiculoAEliminar.abajo;
+        if (!encontrado) {
+            System.out.println("No se encontró ningún vehículo que coincida con el criterio de búsqueda.");
         }
     }
 
