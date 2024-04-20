@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.proyecto2progra;
 
 /**
@@ -9,33 +5,49 @@ package com.mycompany.proyecto2progra;
  * @author Victor
  */
 public class ListaOrtogonal {
-     NodoVehiculo inicio;
+
+    NodoVehiculo inicio;
+
     //constructor
     public ListaOrtogonal() {
         inicio = null;
     }
-   //Metodo para isertar un vehiculo en la lista ortogonal
+    //Metodo para isertar un vehiculo en la lista ortogonal
+
     public void insertarVehiculo(String placa, String color, String linea, int modelo, String propietario) {
         NodoVehiculo nuevo = new NodoVehiculo(placa, color, linea, modelo, propietario);
-          //
+
+        // Si la lista está vacía, el nuevo nodo se convierte en el inicio
         if (inicio == null) {
-            inicio = nuevo; 
+            inicio = nuevo;
             return;
         }
-        // Insertar el nuevo nodo al final de la lista en la dirección horizontal (derecha)
-        NodoVehiculo temp = inicio;
-        while (temp.derecha != null) {
-            temp = temp.derecha;
+
+        // Inicialmente, nos movemos hacia abajo desde el inicio para encontrar la posición de inserción
+        NodoVehiculo tempVertical = inicio;
+        NodoVehiculo ultimoVertical = null;
+        while (tempVertical != null) {
+            ultimoVertical = tempVertical;
+            tempVertical = tempVertical.abajo;
         }
-        temp.derecha = nuevo;
-        nuevo.izquierda = temp;
-        // Insertar el nuevo nodo al final de la lista en la dirección vertical (abajo)
-        temp = inicio;
-        while (temp.abajo != null) {
-            temp = temp.abajo;
+
+        // Ahora, nos movemos hacia la derecha desde el último nodo en la fila para encontrar la posición de inserción
+        NodoVehiculo tempHorizontal = ultimoVertical;
+        NodoVehiculo ultimoHorizontal = null;
+        while (tempHorizontal != null) {
+            ultimoHorizontal = tempHorizontal;
+            tempHorizontal = tempHorizontal.derecha;
         }
-        temp.abajo = nuevo;
-        nuevo.arriba = temp;
+
+        // El nuevo nodo se inserta a la derecha del último nodo horizontal y debajo del último nodo vertical
+        nuevo.izquierda = ultimoHorizontal;
+        nuevo.arriba = ultimoVertical;
+        if (ultimoHorizontal != null) {
+            ultimoHorizontal.derecha = nuevo;
+        }
+        if (ultimoVertical != null) {
+            ultimoVertical.abajo = nuevo;
+        }
     }
 
     public NodoVehiculo buscarVehiculo(String criterioBusqueda, String valorBusqueda) {
@@ -68,37 +80,66 @@ public class ListaOrtogonal {
         return null; // No se encontró ningún vehículo con el valor de búsqueda especificado
     }
 
-    public void eliminarVehiculo(String placa) {
-        if (inicio == null) {
-            System.out.println("La lista está vacía. No hay vehículos que eliminar.");
-            return;
+    public void eliminarVehiculo(String criterio, String valor) {
+        boolean encontrado = false; // Indica si se encontró al menos un vehículo para eliminar
+
+        NodoVehiculo temp = inicio;
+        while (temp != null) {
+            if ((criterio.equals("placa") && temp.getPlaca().equalsIgnoreCase(valor))
+                    || (criterio.equals("color") && temp.getColor().equalsIgnoreCase(valor))
+                    || (criterio.equals("linea") && temp.getLinea().equalsIgnoreCase(valor))
+                    || (criterio.equals("modelo") && String.valueOf(temp.getModelo()).equals(valor))
+                    || (criterio.equals("propietario") && temp.getPropietario().equalsIgnoreCase(valor))) {
+                encontrado = true; // Se encontró al menos un vehículo para eliminar
+
+                // Eliminar referencias al nodo del vehículo en las direcciones horizontal (derecha) y vertical (abajo)
+                if (temp.izquierda != null) {
+                    temp.izquierda.derecha = temp.derecha;
+                }
+                if (temp.derecha != null) {
+                    temp.derecha.izquierda = temp.izquierda;
+                }
+                if (temp.arriba != null) {
+                    temp.arriba.abajo = temp.abajo;
+                }
+                if (temp.abajo != null) {
+                    temp.abajo.arriba = temp.arriba;
+                }
+
+                // Si el nodo a eliminar es el inicio de la lista, actualizar el inicio
+                if (temp == inicio) {
+                    inicio = temp.derecha != null ? temp.derecha : temp.abajo;
+                }
+
+                // Avanzar al siguiente nodo en la dirección vertical (abajo)
+                temp = temp.getAbajo();
+            } else {
+                // Avanzar al siguiente nodo en la dirección horizontal (derecha)
+                temp = temp.getDerecha();
+            }
         }
 
-        // Buscar el nodo del vehículo con la placa especificada
-        NodoVehiculo vehiculoAEliminar = buscarVehiculo("placa", placa);
-
-        if (vehiculoAEliminar == null) {
-            System.out.println("El vehículo con la placa " + placa + " no está registrado.");
-            return;
-        }
-
-        // Eliminar referencias al nodo del vehículo en las direcciones horizontal (derecha) y vertical (abajo)
-        if (vehiculoAEliminar.izquierda != null) {
-            vehiculoAEliminar.izquierda.derecha = vehiculoAEliminar.derecha;
-        }
-        if (vehiculoAEliminar.derecha != null) {
-            vehiculoAEliminar.derecha.izquierda = vehiculoAEliminar.izquierda;
-        }
-        if (vehiculoAEliminar.arriba != null) {
-            vehiculoAEliminar.arriba.abajo = vehiculoAEliminar.abajo;
-        }
-        if (vehiculoAEliminar.abajo != null) {
-            vehiculoAEliminar.abajo.arriba = vehiculoAEliminar.arriba;
-        }
-
-        // Si el nodo a eliminar es el inicio de la lista, actualizar el inicio
-        if (vehiculoAEliminar == inicio) {
-            inicio = vehiculoAEliminar.derecha != null ? vehiculoAEliminar.derecha : vehiculoAEliminar.abajo;
+        if (!encontrado) {
+            System.out.println("No se encontró ningún vehículo que coincida con el criterio de búsqueda.");
         }
     }
+
+    public void listarVehiculos() {
+        NodoVehiculo temp = inicio;
+        if (temp == null) {
+            System.out.println("No hay vehículos registrados.");
+            return;
+        }
+        System.out.println("Vehículos registrados:");
+        while (temp != null) {
+            System.out.println("Placa: " + temp.getPlaca());
+            System.out.println("Color: " + temp.getColor());
+            System.out.println("Línea: " + temp.getLinea());
+            System.out.println("Modelo: " + temp.getModelo());
+            System.out.println("Propietario: " + temp.getPropietario());
+            System.out.println();
+            temp = temp.getAbajo(); // Avanzar al siguiente nodo en la dirección vertical (abajo)
+        }
+    }
+
 }
