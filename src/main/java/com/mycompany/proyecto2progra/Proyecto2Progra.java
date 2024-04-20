@@ -1,4 +1,5 @@
 package com.mycompany.proyecto2progra;
+
 /**
  *
  * @author Cesar
@@ -21,7 +22,8 @@ public class Proyecto2Progra {
             System.out.println("1. Insertar vehículo");
             System.out.println("2. Buscar vehículo");
             System.out.println("3. Eliminar vehículo");
-            System.out.println("4. Salir");
+            System.out.println("4. Listar");
+            System.out.println("5. Salir");
             System.out.print("Seleccione una opción: ");
 
             // Leer la opción del menú
@@ -152,12 +154,17 @@ public class Proyecto2Progra {
                     System.out.println("Vehiculo Eliminado");
                     break;
                 case 4:
+                    System.out.println("Listar Vehículos:");
+                    lista.listarVehiculos();
+                    break;
+                    
+                case 5:
                     System.out.println("Saliendo del programa...");
                     break;
                 default:
                     System.out.println("Opción inválida. Por favor, seleccione una opción válida.");
             }
-        } while (opcion != 4);
+        } while (opcion != 5);
 
         entrada.close();
     }

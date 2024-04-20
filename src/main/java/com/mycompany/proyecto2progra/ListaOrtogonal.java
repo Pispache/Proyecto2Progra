@@ -113,4 +113,23 @@ public class ListaOrtogonal {
             inicio = vehiculoAEliminar.derecha != null ? vehiculoAEliminar.derecha : vehiculoAEliminar.abajo;
         }
     }
+
+    public void listarVehiculos() {
+        NodoVehiculo temp = inicio;
+        if (temp == null) {
+            System.out.println("No hay vehículos registrados.");
+            return;
+        }
+        System.out.println("Vehículos registrados:");
+        while (temp != null) {
+            System.out.println("Placa: " + temp.getPlaca());
+            System.out.println("Color: " + temp.getColor());
+            System.out.println("Línea: " + temp.getLinea());
+            System.out.println("Modelo: " + temp.getModelo());
+            System.out.println("Propietario: " + temp.getPropietario());
+            System.out.println();
+            temp = temp.getAbajo(); // Avanzar al siguiente nodo en la dirección vertical (abajo)
+        }
+    }
+
 }
