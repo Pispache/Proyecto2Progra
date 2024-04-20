@@ -17,25 +17,38 @@ public class ListaOrtogonal {
    //Metodo para isertar un vehiculo en la lista ortogonal
     public void insertarVehiculo(String placa, String color, String linea, int modelo, String propietario) {
         NodoVehiculo nuevo = new NodoVehiculo(placa, color, linea, modelo, propietario);
-          //
+
+        // Si la lista está vacía, el nuevo nodo se convierte en el inicio
         if (inicio == null) {
-            inicio = nuevo; 
+            inicio = nuevo;
             return;
         }
-        // Insertar el nuevo nodo al final de la lista en la dirección horizontal (derecha)
-        NodoVehiculo temp = inicio;
-        while (temp.derecha != null) {
-            temp = temp.derecha;
+
+        // Inicialmente, nos movemos hacia abajo desde el inicio para encontrar la posición de inserción
+        NodoVehiculo tempVertical = inicio;
+        NodoVehiculo ultimoVertical = null;
+        while (tempVertical != null) {
+            ultimoVertical = tempVertical;
+            tempVertical = tempVertical.abajo;
         }
-        temp.derecha = nuevo;
-        nuevo.izquierda = temp;
-        // Insertar el nuevo nodo al final de la lista en la dirección vertical (abajo)
-        temp = inicio;
-        while (temp.abajo != null) {
-            temp = temp.abajo;
+
+        // Ahora, nos movemos hacia la derecha desde el último nodo en la fila para encontrar la posición de inserción
+        NodoVehiculo tempHorizontal = ultimoVertical;
+        NodoVehiculo ultimoHorizontal = null;
+        while (tempHorizontal != null) {
+            ultimoHorizontal = tempHorizontal;
+            tempHorizontal = tempHorizontal.derecha;
         }
-        temp.abajo = nuevo;
-        nuevo.arriba = temp;
+
+        // El nuevo nodo se inserta a la derecha del último nodo horizontal y debajo del último nodo vertical
+        nuevo.izquierda = ultimoHorizontal;
+        nuevo.arriba = ultimoVertical;
+        if (ultimoHorizontal != null) {
+            ultimoHorizontal.derecha = nuevo;
+        }
+        if (ultimoVertical != null) {
+            ultimoVertical.abajo = nuevo;
+        }
     }
 
     public NodoVehiculo buscarVehiculo(String criterioBusqueda, String valorBusqueda) {
